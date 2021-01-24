@@ -50,6 +50,8 @@ defmodule TasksTracker.MixProject do
       {:geo_postgis, "~> 3.1"},
       {:machinery, "~> 1.0.0"},
       {:pow, "~> 1.0.21"},
+      # testing and code quality
+      {:ex_machina, "~> 2.5.0", only: :test}
     ]
   end
 

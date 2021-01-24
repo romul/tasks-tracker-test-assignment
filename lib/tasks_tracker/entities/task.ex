@@ -10,6 +10,7 @@ defmodule TasksTracker.Task do
     field :delivery_point, Geo.PostGIS.Geometry
     field :pickup_point, Geo.PostGIS.Geometry
     field :state, :string
+    field :distance_to_driver, :float, virtual: true
 
     belongs_to(:driver, User)
     belongs_to(:manager, User)

@@ -24,6 +24,7 @@ defmodule TasksTracker.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import TasksTracker.DataCase
+      import TasksTracker.Factories
     end
   end
 
