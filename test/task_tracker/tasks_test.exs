@@ -11,9 +11,8 @@ defmodule TasksTracker.TasksTest do
 
   describe "create_task/2" do
     test "returns an error when some required attributes are missing", ctx do
-      assert get_tasks_count() == 0
-      {:error, _} = Tasks.create_task(ctx.manager, task_params(%{delivery_point: nil}))
-      assert get_tasks_count() == 0
+      {:error, changeset} = Tasks.create_task(ctx.manager, task_params(%{delivery_point: nil}))
+      assert %{delivery_point: ["can't be blank"]} == errors_on(changeset)
     end
 
     test "creates a task when all params present", ctx do

@@ -20,10 +20,6 @@ defmodule TasksTracker.TaskFactory do
         |> Map.merge(params)
       end
 
-      def get_tasks_count do
-        Repo.aggregate(Task, :count, :id)
-      end
-
       def get_last_task do
         Repo.one(from t in Task, order_by: [desc: t.id], limit: 1)
       end

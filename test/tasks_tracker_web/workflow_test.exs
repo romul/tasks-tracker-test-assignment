@@ -47,4 +47,22 @@ defmodule TasksTrackerWeb.WorkflowTest do
       assert %{"result" => "ok"} = json_response(conn, :ok)
     end
   end
+
+  describe "Edge Cases" do
+    test "should return 404 if driver tries to pick the task deleted by a manager", ctx do
+      task = insert(:task)
+
+      conn = delete(ctx.manager_conn, Routes.api_task_path(ctx.manager_conn, :delete, task.id))
+      assert %{"result" => "ok"} = json_response(conn, :ok)
+
+      conn = put(ctx.driver_conn, Routes.api_task_path(ctx.driver_conn, :pick, task.id), %{})
+      assert %{"result" => "error"} = json_response(conn, :not_found)
+    end
+
+    test "should return 401 if token is not passed", _ctx do
+      conn = build_conn()
+      conn = post(conn, Routes.api_task_path(conn, :create), %{})
+      assert %{"result" => "error"} = json_response(conn, :unauthorized)
+    end
+  end
 end

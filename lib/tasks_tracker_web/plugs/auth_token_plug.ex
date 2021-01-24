@@ -17,7 +17,8 @@ defmodule TasksTrackerWeb.Plugs.AuthTokenPlug do
     else
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(401, ~s({ "error": "Invalid token" }))
+      |> put_status(:unauthorized)
+      |> Phoenix.Controller.json(%{"result" => "error", "errors" => ["Unauthorized Access"]})
       |> halt
     end
   end
