@@ -20,7 +20,7 @@ defmodule TasksTracker.MixProject do
   def application do
     [
       mod: {TasksTracker.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :mnesia, :runtime_tools]
     ]
   end
 
@@ -44,7 +44,12 @@ defmodule TasksTracker.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      # project related deps
+      {:elixir_uuid, "~> 1.2"},
+      {:geo_postgis, "~> 3.1"},
+      {:machinery, "~> 1.0.0"},
+      {:pow, "~> 1.0.21"},
     ]
   end
 
