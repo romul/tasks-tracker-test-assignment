@@ -14,7 +14,10 @@ defmodule TasksTracker.Tasks do
   end
 
   def delete_task(task_id) do
-    from(t in Task, where: t.id == ^task_id) |> Repo.delete_all()
+    case from(t in Task, where: t.id == ^task_id) |> Repo.delete_all() do
+      {1, nil} -> :ok
+      _ -> :error
+    end
   end
 
   def list_tasks_nearest_to(point, max_count \\ 10) do
@@ -74,9 +77,9 @@ defmodule TasksTracker.Tasks do
     end
   end
 
-  def finish_task(nil), do: nil
+  def finish_task(nil, _), do: nil
 
-  def finish_task(task) do
+  def finish_task(task, _driver) do
     case Machinery.transition_to(task, TaskStateMachine, "done") do
       {:ok, upd_task} ->
         task

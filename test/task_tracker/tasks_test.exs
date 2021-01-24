@@ -69,11 +69,9 @@ defmodule TasksTracker.TasksTest do
     test "fails when try to pick assigned task", ctx do
       {:ok, task} = Tasks.pick_task(ctx.task, ctx.driver)
 
-      {:ok, another_driver} =
-        Users.create_driver(%{"full_name" => "Fake Driver", "phone" => "+79876543219"})
+      {:ok, another_driver} = Users.create_driver(%{"full_name" => "Fake Driver", "phone" => "+79876543219"})
 
-      assert {:error, "This task already has been picked by another driver"} =
-               Tasks.pick_task(task, another_driver)
+      assert {:error, "This task already has been picked by another driver"} = Tasks.pick_task(task, another_driver)
     end
   end
 
@@ -87,11 +85,11 @@ defmodule TasksTracker.TasksTest do
     test "success when finish assigned task", ctx do
       assert {:ok, task} = Tasks.pick_task(ctx.task, ctx.driver)
 
-      assert {:ok, %{state: "done"}} = Tasks.finish_task(task)
+      assert {:ok, %{state: "done"}} = Tasks.finish_task(task, ctx.driver)
     end
 
     test "fails when try to finish unassigned task", ctx do
-      assert {:error, "Transition to this state isn't declared."} = Tasks.finish_task(ctx.task)
+      assert {:error, "Transition to this state isn't declared."} = Tasks.finish_task(ctx.task, ctx.driver)
     end
   end
 end

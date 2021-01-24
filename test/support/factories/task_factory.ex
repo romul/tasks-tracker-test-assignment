@@ -2,6 +2,7 @@ defmodule TasksTracker.TaskFactory do
   defmacro __using__(_opts) do
     quote do
       alias TasksTracker.{Task, Repo}
+      import Ecto.Query
 
       def task_factory do
         struct(Task, task_params())
@@ -21,6 +22,10 @@ defmodule TasksTracker.TaskFactory do
 
       def get_tasks_count do
         Repo.aggregate(Task, :count, :id)
+      end
+
+      def get_last_task do
+        Repo.one(from t in Task, order_by: [desc: t.id], limit: 1)
       end
     end
   end

@@ -23,6 +23,7 @@ defmodule TasksTrackerWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import TasksTrackerWeb.ConnCase
+      import TasksTracker.Factories
 
       alias TasksTrackerWeb.Router.Helpers, as: Routes
 

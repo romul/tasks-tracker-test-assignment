@@ -11,6 +11,7 @@ defmodule TasksTrackerWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug TasksTrackerWeb.Plugs.AuthTokenPlug
   end
 
   scope "/", TasksTrackerWeb do
@@ -19,10 +20,13 @@ defmodule TasksTrackerWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", TasksTrackerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", TasksTrackerWeb, as: :api do
+    pipe_through :api
+
+    resources "/tasks", TaskController, only: [:index, :create, :delete]
+    put "/tasks/:id/pick", TaskController, :pick
+    put "/tasks/:id/finish", TaskController, :finish
+  end
 
   # Enables LiveDashboard only for development
   #

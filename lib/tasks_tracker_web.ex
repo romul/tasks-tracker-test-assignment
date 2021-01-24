@@ -23,7 +23,9 @@ defmodule TasksTrackerWeb do
 
       import Plug.Conn
       import TasksTrackerWeb.Gettext
+      use TasksTrackerWeb.Controllers.Helpers
       alias TasksTrackerWeb.Router.Helpers, as: Routes
+      alias TasksTrackerWeb.Plugs.EnsureRolePlug
     end
   end
 

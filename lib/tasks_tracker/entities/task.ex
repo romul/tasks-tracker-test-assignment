@@ -3,6 +3,7 @@ defmodule TasksTracker.Task do
   import Ecto.Changeset
   alias TasksTracker.User
 
+  @derive {Jason.Encoder, except: [:__meta__, :driver, :manager]}
   @supported_states ~w(new assigned done)
 
   schema "tasks" do
