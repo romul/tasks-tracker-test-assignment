@@ -1,0 +1,30 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: tasks_tracker
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    ports:
+      - 4000:4000
+    command: /app/docker/docker-command.sh
+    tty: true
+    stdin_open: true
+
+  db:
+    image: postgis/postgis:13-master
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tasks_tracker
+    restart: always
+    volumes:
+      - ./volumes/postgres/data:/var/lib/postgresql/data

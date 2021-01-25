@@ -18,6 +18,14 @@ config :tasks_tracker, TasksTrackerWeb.Endpoint,
   pubsub_server: TasksTracker.PubSub,
   live_view: [signing_salt: "EiQ1IGml"]
 
+config :tasks_tracker, TasksTracker.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  types: TasksTracker.PostgresTypes,
+  username: System.get_env("DATABASE_USERNAME"),
+  password: System.get_env("DATABASE_PASSWORD"),
+  database: System.get_env("DATABASE_NAME"),
+  hostname: System.get_env("DATABASE_HOST")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
