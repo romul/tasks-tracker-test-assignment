@@ -8,6 +8,7 @@ defmodule TasksTracker.MixProject do
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      test_coverage: [tool: ExCoveralls],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -51,7 +52,8 @@ defmodule TasksTracker.MixProject do
       {:machinery, "~> 1.0.0"},
       {:pow, "~> 1.0.21"},
       # testing and code quality
-      {:ex_machina, "~> 2.5.0", only: :test}
+      {:ex_machina, "~> 2.5.0", only: :test},
+      {:excoveralls, "~> 0.10", only: :test},
     ]
   end
 

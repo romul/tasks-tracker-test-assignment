@@ -8,6 +8,7 @@ defmodule TasksTrackerWeb.TaskControllerTest do
 
       [
         conn: build_conn() |> Plug.Conn.put_req_header("authorization", "Bearer #{manager.token}"),
+        manager: manager,
         payload: %{
           "caption" => "Msk->Tver",
           "pickup_point" => %{"lat" => "55.754", "lng" => "37.623"},
@@ -43,6 +44,18 @@ defmodule TasksTrackerWeb.TaskControllerTest do
 
       assert %{"result" => "error"} = json_response(conn, :unauthorized)
     end
+
+    test "can get list of tasks created by him/her", ctx do
+      another_manager = insert(:manager, full_name: "Fake Manager")
+      t1 = insert(:task, manager_id: ctx.manager.id)
+      _t2 = insert(:task, manager_id: another_manager.id)
+      _t3 = insert(:task, manager_id: nil)
+
+      conn = get(ctx.conn, Routes.api_task_path(ctx.conn, :index))
+      assert %{"result" => "ok", "tasks" => [task]} = json_response(conn, :ok)
+
+      assert t1.id == task["id"]
+    end
   end
 
 
@@ -51,7 +64,8 @@ defmodule TasksTrackerWeb.TaskControllerTest do
       driver = insert(:driver)
 
       [
-        conn: build_conn() |> Plug.Conn.put_req_header("authorization", "Bearer #{driver.token}")
+        conn: build_conn() |> Plug.Conn.put_req_header("authorization", "Bearer #{driver.token}"),
+        driver: driver
       ]
     end
 
@@ -67,6 +81,29 @@ defmodule TasksTrackerWeb.TaskControllerTest do
 
       distances = Enum.map(tasks, fn(t) -> t["distance"] end)
       assert Enum.sort(distances) == distances
+    end
+
+    test "can get only unassigned tasks by location", ctx do
+      another_driver = insert(:driver, full_name: "Fake Driver")
+      t1 = insert(:task)
+      _t2 = insert(:task, driver_id: another_driver.id)
+
+      conn = get(ctx.conn, Routes.api_task_path(ctx.conn, :index, %{"lat" => "55.753", "lng" => "37.622"}))
+      assert %{"result" => "ok", "tasks" => [task]} = json_response(conn, :ok)
+
+      assert t1.id == task["id"]
+    end
+
+    test "can get list of tasks assigned to him/her", ctx do
+      another_driver = insert(:driver, full_name: "Fake Driver")
+      t1 = insert(:task, driver_id: ctx.driver.id)
+      _t2 = insert(:task, driver_id: another_driver.id)
+      _t3 = insert(:task, driver_id: nil)
+
+      conn = get(ctx.conn, Routes.api_task_path(ctx.conn, :index))
+      assert %{"result" => "ok", "tasks" => [task]} = json_response(conn, :ok)
+
+      assert t1.id == task["id"]
     end
 
     test "can pick an unassigned task", ctx do

@@ -34,3 +34,8 @@ Each task can be in 3 states:
 1. The driver gets the list of the nearest tasks by submitting current location [lat, long]
 1. Driver picks one task from the list (the task becomes assigned)
 1. Driver finishes the task (becomes done)
+
+
+## Test coverage
+
+Run `MIX_ENV=test mix coveralls.html` to check test coverage

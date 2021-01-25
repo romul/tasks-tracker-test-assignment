@@ -64,5 +64,15 @@ defmodule TasksTrackerWeb.WorkflowTest do
       conn = post(conn, Routes.api_task_path(conn, :create), %{})
       assert %{"result" => "error"} = json_response(conn, :unauthorized)
     end
+
+    test "should return bad_request if manager tries to delete a deleted task", ctx do
+      task = insert(:task)
+
+      conn = delete(ctx.manager_conn, Routes.api_task_path(ctx.manager_conn, :delete, task.id))
+      assert %{"result" => "ok"} = json_response(conn, :ok)
+
+      conn = delete(ctx.manager_conn, Routes.api_task_path(ctx.manager_conn, :delete, task.id))
+      assert %{"result" => "error"} = json_response(conn, :bad_request)
+    end
   end
 end
